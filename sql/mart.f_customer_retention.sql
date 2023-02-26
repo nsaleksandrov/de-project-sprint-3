@@ -14,7 +14,8 @@ new_customers as
 from customers
 where status = 'shipped'
 group by customer_id
-having count(*)=1),
+having count(*)=1
+),
 
 returning_customers as 
 (select customer_id

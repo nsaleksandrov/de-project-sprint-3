@@ -108,7 +108,7 @@ args = {
     'email': ['student@example.com'],
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 0
+    'retries': 2
 }
 
 business_dt = '{{ ds }}'
@@ -157,7 +157,14 @@ with DAG(
         postgres_conn_id=postgres_conn_id,
         sql="sql/mart.d_city.sql")
 
-    update_f_sales = PostgresOperator(
+    f_customer_retention = PostgresOperator(
+        task_id='update_f_sales',
+        postgres_conn_id=postgres_conn_id,
+        sql="sql/mart.f_customer_retention.sql",
+        parameters={"date": {business_dt}}
+    )
+
+    te_f_sales = PostgresOperator(
         task_id='update_f_sales',
         postgres_conn_id=postgres_conn_id,
         sql="sql/mart.f_sales.sql",
